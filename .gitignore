@@ -1,0 +1,24 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+Makefile.in
+Makefile
+
+.deps
+.libs
+
+# Extra files
+*~
+*.blend1
+*.pyc
