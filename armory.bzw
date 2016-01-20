@@ -1,0 +1,1039 @@
+
+# PYBZW map export module v0.1 by Kaadmy
+# Map made by Kaadmy
+
+world
+  name "Armory"
+  size 150
+end
+
+options
+  -j
+  +r
+  -sb
+  -fb
+  +f KY{1}
+  -set _maxFlagGrabs 5
+  -ms 4
+  -set _skyColor "0.8 0.3 0.1"
+end
+
+textureMatrix
+  name flowingwater
+  shift 0.0 -2.0
+end
+
+textureMatrix
+  name small
+  fixedscale 0.5 0.5
+end
+
+textureMatrix
+  name medium
+  fixedscale 0.7 0.7
+end
+
+textureMatrix
+  name large
+  fixedscale 2.0 2.0
+end
+
+textureMatrix
+  name xlarge
+  fixedscale 3.0 3.0
+end
+
+material
+  name wall
+  texture wall
+  texmat xlarge
+end
+
+material
+  name octacolumn
+  texture pyrwall
+end
+
+material
+  name caution
+  texture caution
+end
+
+material
+  name smallcaution
+  texture caution
+  texmat small
+end
+
+material
+  name glass
+  texture telelink
+  diffuse 0.8 0.8 1.0 0.6
+  texmat large
+  spheremap
+end
+
+material
+  name smallglass
+  texture telelink
+  diffuse 0.8 0.8 1.0 0.6
+  texmat medium
+  spheremap
+end
+
+material
+  name shrub
+  nosorting
+  noculling
+  noradar
+  noshadow
+  nolighting
+  alphathresh 0.6
+  diffuse 0.0 1.0 0.0 1.0
+  texture http://images.bzflag.org/bz_legacy/louman/churchyard/shrub.png
+end
+
+material
+  name purpleshrub
+  nosorting
+  noculling
+  noradar
+  noshadow
+  nolighting
+  alphathresh 0.6
+  diffuse 1.0 0.0 1.0 1.0
+  texture http://images.bzflag.org/bz_legacy/louman/churchyard/shrub.png
+end
+
+material
+  name vines
+  nosorting
+  noradar
+  noshadow
+  alphathresh 0.6
+  texture http://images.bzflag.org/bz_legacy/louman/churchyard/treeleaves.png
+end
+
+material
+  name arrowsign
+  nosorting
+  noradar
+  noshadow
+  alphathresh 0.6
+  texture arrow
+end
+
+material
+  name armorypoint
+  noshadow
+  alphathresh 0.6
+  texture armorypoint
+end
+
+material
+  name flowingwater
+  nosorting
+  noculling
+  noradar
+  noshadow
+  nolighting
+  texture water
+  diffuse 0.9 0.9 1.0 0.8
+  texmat flowingwater
+end
+
+define armorypoint
+
+mesh
+  vertex -3.0 3.0 0.0
+  vertex 3.0 3.0 0.0
+  vertex 3.0 -3.0 0.0
+  vertex -3.0 -3.0 0.0
+  texcoord 0.0 1.0
+  texcoord 1.0 1.0
+  texcoord 1.0 0.0
+  texcoord 0.0 0.0
+  matref armorypoint
+  face # north
+   vertices 3 2 1 0
+   texcoords 0 1 2 3
+   passable
+  endface
+end
+
+enddef
+
+define shrub
+
+mesh
+  vertex -3.0 0.0 5.0
+  vertex 2.0 0.0 5.0
+  vertex 2.0 0.0 0.0
+  vertex -3.0 0.0 0.0
+  vertex 0.0 -3.0 5.0
+  vertex 0.0 2.0 5.0
+  vertex 0.0 2.0 0.0
+  vertex 0.0 -3.0 0.0
+  texcoord 0.0 1.0
+  texcoord 1.0 1.0
+  texcoord 1.0 0.0
+  texcoord 0.0 0.0
+  matref shrub
+  face # north-south
+   vertices 0 1 2 3
+   texcoords 0 1 2 3
+   passable
+  endface
+  face # east-west
+   vertices 4 5 6 7
+   texcoords 0 1 2 3
+   passable
+  endface
+end
+
+enddef
+
+define purpleshrub
+
+mesh
+  vertex -5.0 0.0 5.0
+  vertex 5.0 0.0 5.0
+  vertex 5.0 0.0 0.0
+  vertex -5.0 0.0 0.0
+  vertex 0.0 -5.0 5.0
+  vertex 0.0 5.0 5.0
+  vertex 0.0 5.0 0.0
+  vertex 0.0 -5.0 0.0
+  texcoord 0.0 1.0
+  texcoord 1.0 1.0
+  texcoord 1.0 0.0
+  texcoord 0.0 0.0
+  matref purpleshrub
+  face # north-south
+   vertices 0 1 2 3
+   texcoords 0 1 2 3
+   passable
+  endface
+  face # east-west
+   vertices 4 5 6 7
+   texcoords 0 1 2 3
+   passable
+  endface
+end
+
+enddef
+
+define vines
+
+mesh
+  vertex -5.0 0.1 0.0
+  vertex 5.0 0.1 0.0
+  vertex 5.0 0.1 -16.0
+  vertex -5.0 0.1 -16.0
+  texcoord 0.0 1.0
+  texcoord 1.0 1.0
+  texcoord 1.0 0.0
+  texcoord 0.0 0.0
+  matref vines
+  face # north
+   vertices 0 1 2 3
+   texcoords 0 1 2 3
+   passable
+  endface
+end
+
+enddef
+
+define widevines
+
+mesh
+  vertex -10.0 0.1 0.0
+  vertex 10.0 0.1 0.0
+  vertex 10.0 0.1 -16.0
+  vertex -10.0 0.1 -16.0
+  texcoord 0.0 1.0
+  texcoord 1.0 1.0
+  texcoord 1.0 0.0
+  texcoord 0.0 0.0
+  matref vines
+  face # north
+   vertices 0 1 2 3
+   texcoords 0 1 2 3
+   passable
+  endface
+end
+
+enddef
+
+define arrowsign
+
+mesh
+  vertex -3.0 0.1 6.0
+  vertex 3.0 0.1 6.0
+  vertex 3.0 0.1 0.0
+  vertex -3.0 0.1 0.0
+  texcoord 0.0 1.0
+  texcoord 1.0 1.0
+  texcoord 1.0 0.0
+  texcoord 0.0 0.0
+  matref arrowsign
+  face # north
+   vertices 0 1 2 3
+   texcoords 0 1 2 3
+   passable
+  endface
+end
+
+enddef
+
+define octacolumn_long
+
+box
+  pos 0.0 0.0 0.0
+  size 1.0 1.0 43.0
+  matref octacolumn
+end
+
+enddef
+
+define octacolumn
+
+box
+  pos 0.0 0.0 0.0
+  size 1.0 1.0 23.0
+  matref octacolumn
+end
+
+enddef
+
+define platform_full
+
+group octacolumn
+  shift -10.0 10.0 0.0
+end
+
+group octacolumn_top
+  shift -10.0 10.0 23.0
+end
+
+group octacolumn
+  shift -10.0 -10.0 0.0
+end
+
+group octacolumn_top
+  shift -10.0 -10.0 23.0
+end
+
+group octacolumn
+  shift 10.0 -10.0 0.0
+end
+
+group octacolumn_top
+  shift 10.0 -10.0 23.0
+end
+
+group octacolumn
+  shift 10.0 10.0 0.0
+end
+
+group octacolumn_top
+  shift 10.0 10.0 23.0
+end
+
+box
+  pos 0.0 0.0 0.0
+  size 10.0 10.0 8.0
+end
+
+box
+  pos 0.0 0.0 18.0
+  size 10.0 10.0 2.0
+end
+
+enddef
+
+define platform_half
+
+group octacolumn
+  shift -10.0 10.0 0.0
+end
+
+group octacolumn
+  shift 10.0 10.0 0.0
+end
+
+box
+  pos 0.0 0.0 0.0
+  size 10.0 10.0 8.0
+end
+
+box
+  pos 0.0 0.0 18.0
+  size 10.0 10.0 2.0
+end
+
+enddef
+
+define tower
+
+group octacolumn_long
+  shift -5.0 5.0 0.0
+end
+
+group octacolumn_long
+  shift -5.0 -5.0 0.0
+end
+
+group octacolumn_long
+  shift 5.0 -5.0 0.0
+end
+
+group octacolumn_long
+  shift 5.0 5.0 0.0
+end
+
+box
+  pos 0.0 0.0 8.0
+  size 5.0 5.0 2.0
+end
+
+box
+  pos 0.0 0.0 18.0
+  size 5.0 5.0 2.0
+end
+
+box
+  pos 0.0 0.0 28.0
+  size 5.0 5.0 2.0
+end
+
+box
+  pos 0.0 0.0 38.0
+  size 5.0 5.0 2.0
+end
+
+enddef
+
+box
+  pos -130.0 -80.0 0.0
+  size 5.0 5.0 0.2
+end
+
+zone
+  pos -130.0 -80.0 1.0
+  size 5.0 5.0 5.0
+  flag KY
+end
+
+group shrub
+  shift -122.0 -77.0 0.0
+end
+
+group shrub
+  shift -120.0 -82.0 0.0
+end
+
+group shrub
+  shift -123.0 -88.0 0.0
+end
+
+group shrub
+  shift -124.0 -90.0 0.0
+end
+
+box
+  pos -140.0 -120.0 0.0
+  size 5.0 5.0 1.75
+  top matref caution
+  bottom matref caution
+  sides matref smallcaution
+end
+
+zone
+  pos -140.0 -120.0 1.75
+  size 3.0 3.0 5.0
+  team 1
+end
+
+box
+  pos -110.0 -120.0 0.0
+  size 5.0 5.0 1.75
+  top matref caution
+  bottom matref caution
+  sides matref smallcaution
+end
+
+zone
+  pos -110.0 -120.0 1.75
+  size 3.0 3.0 5.0
+  team 1
+end
+
+box
+  pos -80.0 -120.0 0.0
+  size 5.0 5.0 1.75
+  top matref caution
+  bottom matref caution
+  sides matref smallcaution
+end
+
+zone
+  pos -80.0 -120.0 1.75
+  size 3.0 3.0 5.0
+  team 1
+end
+
+box
+  pos -50.0 -120.0 0.0
+  size 5.0 5.0 1.75
+  top matref caution
+  bottom matref caution
+  sides matref smallcaution
+end
+
+zone
+  pos -50.0 -120.0 1.75
+  size 3.0 3.0 5.0
+  team 1
+end
+
+box
+  pos 40.0 -120.0 0.0
+  size 5.0 5.0 1.75
+  top matref caution
+  bottom matref caution
+  sides matref smallcaution
+end
+
+zone
+  pos 40.0 -120.0 1.75
+  size 3.0 3.0 5.0
+  team 2
+end
+
+box
+  pos 70.0 -120.0 0.0
+  size 5.0 5.0 1.75
+  top matref caution
+  bottom matref caution
+  sides matref smallcaution
+end
+
+zone
+  pos 70.0 -120.0 1.75
+  size 3.0 3.0 5.0
+  team 2
+end
+
+box
+  pos 100.0 -120.0 0.0
+  size 5.0 5.0 1.75
+  top matref caution
+  bottom matref caution
+  sides matref smallcaution
+end
+
+zone
+  pos 100.0 -120.0 1.75
+  size 3.0 3.0 5.0
+  team 2
+end
+
+group shrub
+  shift -106.0 12.0 0.0
+end
+
+group shrub
+  shift -107.0 10.0 0.0
+end
+
+group vines
+  shift -140.0 -10.0 20.0
+  rot 180
+end
+
+group arrowsign
+  scale 1 -1 1
+  shift -110.0 0.0 1.0
+  rot -90
+end
+
+box
+  pos -140.0 0.0 0.0
+  size 10.0 10.0 20.0
+end
+
+group platform_full
+  shift -120.0 0.0 0.0
+end
+
+group platform_half
+  shift -120.0 20.0 0.0
+end
+
+box
+  pos -120.0 40.0 1.55
+  size 5.0 10.0 6.35
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos -120.0 70.0 0.0
+  size 10.0 20.0 20.0
+end
+
+group tower
+  shift -90.0 70.0 0.0
+end
+
+group platform_full
+  shift -120.0 100.0 0.0
+end
+
+group platform_half
+  shift -100.0 100.0 0.0
+  rot -90
+end
+
+box
+  pos -80.0 100.0 1.55
+  size 10.0 5.0 6.35
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+group arrowsign
+  spin 45 0 1 0
+  shift -67.0 90.05 12.0
+  rot 180
+end
+
+group vines
+  shift -60.0 90.0 20.0
+  rot 180
+end
+
+group vines
+  scale -1 1 1
+  shift -50.0 90.0 16.0
+  rot 180
+end
+
+box
+  pos -50.0 100.0 0.0
+  size 20.0 10.0 20.0
+end
+
+group arrowsign
+  scale -1 1 1
+  shift 40.0 90.0 2.0
+  rot 180
+end
+
+group vines
+  shift 40.0 110.0 16.0
+end
+
+box
+  pos 50.0 100.0 0.0
+  size 20.0 10.0 20.0
+end
+
+box
+  pos 0.0 100.0 0.0
+  size 30.0 3.0 1.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 0.0 100.0 19.0
+  size 30.0 3.0 0.9
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos -27.75 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos -22.75 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos -17.75 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos -12.75 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos -7.75 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos -2.75 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 2.25 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 7.25 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 12.25 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 17.25 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 22.25 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 27.25 100.0 1.0
+  size 1.0 1.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+group shrub
+  shift -45.0 117.0 0.0
+end
+
+group shrub
+  shift -43.0 118.0 0.0
+end
+
+group shrub
+  shift -46.0 120.0 0.0
+end
+
+teleporter bars_lower
+  pos -40.0 120.0 0.0
+  size -0.125 3.0 8.0
+  rot 90
+  border 1.0
+end
+
+teleporter bars_upper
+  pos -40.0 100.0 20.0
+  size -0.125 3.0 8.0
+  border 1.0
+end
+
+link
+  name teleporters_bars
+  from bars_lower:f
+  to bars_upper:b
+end
+
+link
+  name teleporters_bars
+  from bars_lower:b
+  to bars_upper:f
+end
+
+link
+  name teleporters_bars
+  from bars_upper:f
+  to bars_lower:b
+end
+
+link
+  name teleporters_bars
+  from bars_upper:b
+  to bars_lower:f
+end
+
+group platform_full
+  shift -40.0 20.0 0.0
+end
+
+box
+  pos -40.0 0.0 1.55
+  size 5.0 10.0 6.35
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+group platform_full
+  shift -40.0 -20.0 0.0
+end
+
+group platform_half
+  shift -20.0 -20.0 0.0
+  rot -90
+end
+
+group widevines
+  shift 30.0 30.0 25.0
+  rot -90
+end
+
+group vines
+  shift 30.0 50.0 30.0
+  rot -90
+end
+
+box
+  pos 20.0 20.0 0.0
+  size 10.0 50.0 40.0
+  matref wall
+end
+
+group arrowsign
+  scale -1 1 1
+  spin -45 0 1 0
+  shift 60.0 10.0 10.0
+end
+
+group vines
+  shift 90.0 3.0 34.0
+  rot -90
+end
+
+box
+  pos 60.0 0.0 0.0
+  size 30.0 10.0 40.0
+  matref wall
+end
+
+box
+  pos 30.0 45.0 0.0
+  size 3.0 5.0 35.0
+  matref flowingwater
+  passable
+end
+
+group shrub
+  shift 120.0 60.0 0.0
+end
+
+group shrub
+  scale 2.3 2.3 0.8
+  shift 118.0 54.0 0.0
+end
+
+box
+  pos 90.0 51.5 0.0
+  size 60.0 0.5 1.5
+  matref wall
+end
+
+box
+  pos 90.0 38.5 0.0
+  size 60.0 0.5 1.5
+  matref wall
+end
+
+box
+  pos 90.0 45.0 0.0
+  size 6.2 60.1 1.0
+  rot 90
+  matref flowingwater
+  passable
+end
+
+box
+  pos 0.0 -40.0 0.0
+  size 10.0 30.0 40.0
+end
+
+box
+  pos 0.0 -140.0 0.0
+  size 10.0 10.0 40.0
+end
+
+box
+  pos 0.0 -100.0 0.0
+  size 3.0 30.0 1.0
+end
+
+box
+  pos 0.0 -100.0 2.0
+  size 1.0 30.0 18.0
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+box
+  pos 0.0 -100.0 20.0
+  size 3.0 30.0 20.0
+end
+
+group purpleshrub
+  shift 18.0 -43.0 0.0
+end
+
+group purpleshrub
+  shift 14.0 -40.0 0.0
+end
+
+group purpleshrub
+  shift 17.0 -36.0 0.0
+end
+
+group arrowsign
+  spin -45 1 0 0
+  shift 10.0 -55.0 13.0
+  rot -90
+end
+
+box
+  pos 15.0 -55.0 8.0
+  size 5.0 5.0 2.0
+end
+
+box
+  pos 6.5 -90.0 20.0
+  size 3.5 5.0 2.0
+end
+
+box
+  pos 6.5 -125.0 20.0
+  size 3.5 5.0 2.0
+end
+
+group arrowsign
+  scale -1 1 1
+  shift 140.0 10.0 1.0
+end
+
+group platform_full
+  shift 140.0 0.0 0.0
+end
+
+box
+  pos 110.0 0.0 2.55
+  size 20.0 5.0 5.35
+  top matref glass
+  bottom matref glass
+  sides matref smallglass
+end
+
+group tower
+  shift -10.0 10.0 0.0
+end
+
+group tower
+  shift 130.0 -90.0 0.0
+end
+
+armorypoint
+  pos -80.0 -10.0 -0.1
+  size 3.0 3.0 5.0
+  title "The Gate"
+  name "gate"
+  unlock "roof"
+end
+
+group armorypoint
+  shift -80.0 -10.0 0.0
+end
+
+armorypoint
+  pos -120.0 60.0 19.9
+  size 3.0 3.0 5.0
+  title "The Roof"
+  name "roof"
+  unlock "bridge"
+end
+
+group armorypoint
+  shift -120.0 60.0 20.1
+end
+
+armorypoint
+  pos 60.0 100.0 19.9
+  size 3.0 3.0 5.0
+  title "The Bridge"
+  name "bridge"
+  unlock "waterfall"
+end
+
+group armorypoint
+  shift 60.0 100.0 20.1
+end
+
+armorypoint
+  pos 40.0 20.0 -0.1
+  size 3.0 3.0 5.0
+  title "The Waterfall"
+  name "waterfall"
+  unlock "armory"
+end
+
+group armorypoint
+  shift 40.0 20.0 0.0
+end
+
+armorypoint
+  pos 6.5 -125.0 21.9
+  size 3.0 3.0 5.0
+  title "The Armory"
+  name "armory"
+end
+
+group armorypoint
+  shift 6.5 -125.0 22.1
+end
