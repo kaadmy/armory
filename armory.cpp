@@ -117,8 +117,8 @@ bool armory::NoPlayers() {
 
 bool armory::EnoughPlayers() {
   if(bz_getTeamCount(attackTeamColor) >= 1 && bz_getTeamCount(defendTeamColor) >= 1)
-    return false;
-  return true;
+    return true;
+  return false;
 }
 
 void armory::StartMatch (void) {
@@ -164,7 +164,7 @@ void armory::WinState (int team) {
     teamString = "Nobody";
   }
   
-  if(stdcmp(teamString.c_str(), "Nobody")) 
+  if(strcmp(teamString.c_str(), "Nobody")) 
     bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "Nobody won the round; It's a tie!");
   else
     bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "The %s have won the round!", teamString.c_str());
