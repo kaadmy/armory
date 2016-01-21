@@ -6,6 +6,7 @@ Adds a gamemode similar to Team Fortress 2's "payload" gamemode.
 
 To run with the default map bundled with this plugin, run bzfs with:
   -conf armory.conf
+Change vthe .conf file as needed for the file paths.
 
 Attackers(Red team):
   Break into the other team's armory.
