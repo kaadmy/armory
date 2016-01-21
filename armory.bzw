@@ -120,14 +120,14 @@ material
   noradar
   noshadow
   alphathresh 0.6
-  texture arrow
+  texture http://images.bzflag.org/kdmy/arrow.png
 end
 
 material
   name armorypoint
   noshadow
   alphathresh 0.6
-  texture armorypoint
+  texture http://images.bzflag.org/kaadmy/armorypoint.png
 end
 
 material

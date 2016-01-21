@@ -176,7 +176,7 @@ bzw.add_object("material", [
         ["noradar"],
         ["noshadow"],
         ["alphathresh", 0.6],
-        ["texture", "arrow"], # change to URL when finished: http://images.bzflag.org/kaadmy/arrow.png
+        ["texture", "http://images.bzflag.org/kdmy/arrow.png"],
         ])
 
 # armorypoint material
@@ -184,7 +184,7 @@ bzw.add_object("material", [
         ["name", "armorypoint"],
         ["noshadow"],
         ["alphathresh", 0.6],
-        ["texture", "armorypoint"], # change to URL when finished: http://images.bzflag.org/kaadmy/armorypoint.png
+        ["texture", "http://images.bzflag.org/kaadmy/armorypoint.png"],
         ])
 
 # flowing water material
