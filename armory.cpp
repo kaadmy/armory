@@ -138,8 +138,7 @@ void armory::StartMatch (void) {
 
   // reset all the player scores
   for(unsigned int i = 0; i < playerList.size(); i++) {
-    bz_setPlayerLosses(playerList[i].playerID, 0);
-    bz_setPlayerWins(playerList[i].playerID, 0);
+    bz_resetPlayerScore(playerList[i].playerID);
   }
 }
 
@@ -155,10 +154,15 @@ void armory::WinState (int team) {
     attackerWins ++;
     defenderLosses --;
     
+    bz_setTeamWins(attackTeamColor, attackerWins);
+    bz_setTeamLosses(defendTeamColor, defenderLosses);
   } else if(team == DEFENDERS) {
     defenderWins ++;
     attackerLosses --;
     
+    bz_setTeamWins(defendTeamColor, defenderWins);
+    bz_setTeamLosses(attackTeamColor, attackerLosses);
+
     teamString = "Defenders";
   } else if(team == TIE) {
     teamString = "Nobody";
@@ -235,78 +239,103 @@ bool armory::MapObject (bz_ApiString object, bz_CustomMapObjectInfo *data) {
 
 void armory::Event (bz_EventData *eventData) {
   switch(eventData->eventType) {
-  case bz_eTickEvent:
-    {
-      bz_TickEventData_V1* tick = (bz_TickEventData_V1*)eventData;
+  case bz_eTickEvent: {
+    bz_TickEventData_V1* tick = (bz_TickEventData_V1*)eventData;
 
-      if(!EnoughPlayers())
-	return;
+    if(!EnoughPlayers())
+      return;
 
-      float timeLeft = matchEndTime - bz_getCurrentTime(); // seconds remaining in the match
+    float timeLeft = matchEndTime - bz_getCurrentTime(); // seconds remaining in the match
 
-      if(timeLeft < 0.0) {
-	WinState(DEFENDERS);
-      }
-
-      if(timeLeft > 0.0 && (float)tick->eventTime >= nextTimeWarning) {
-	if(timeLeft < 10.0) {
-	  nextTimeWarning += 1.0; // every second less than 10 seconds
-
-	  std::string txt =  + " seconds remaining";
-	  bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "%d seconds remaining",
-			      (int)ceil(timeLeft));
-	} else if(timeLeft < 30.0) {
-	  nextTimeWarning += 20.0; // from 10 seconds down
-
-	  bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "%d seconds remaining",
-			      (int)ceil(timeLeft));
-	} else {
-	  int minutesLeft = ceil(timeLeft / 60);
-
-	  if(minutesLeft == 1)
-	    nextTimeWarning += 30.0; // half minute
-	  else
-	    nextTimeWarning += 60.0; // next minute
-
-	  bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "%d minutes remaining", minutesLeft);
-	}
-      }
-      
-      break;
+    if(timeLeft < 0.0) {
+      WinState(DEFENDERS);
     }
+
+    if(timeLeft > 0.0 && (float)tick->eventTime >= nextTimeWarning) {
+      if(timeLeft < 10.0) {
+	nextTimeWarning += 1.0; // every second less than 10 seconds
+
+	std::string txt =  + " seconds remaining";
+	bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "%d seconds remaining",
+			    (int)ceil(timeLeft));
+      } else if(timeLeft < 30.0) {
+	nextTimeWarning += 20.0; // from 10 seconds down
+
+	bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "%d seconds remaining",
+			    (int)ceil(timeLeft));
+      } else {
+	int minutesLeft = ceil(timeLeft / 60);
+
+	if(minutesLeft == 1)
+	  nextTimeWarning += 30.0; // half minute
+	else
+	  nextTimeWarning += 60.0; // next minute
+
+	bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "%d minutes remaining", minutesLeft);
+      }
+    }
+      
+    break;
+  }
     
+  case bz_eTeamScoreChanged: {
+    bz_TeamScoreChangeEventData_V1* event = (bz_TeamScoreChangeEventData_V1*)eventData;
+
+    if(event->element == bz_eWins) {
+      if(event->team == attackTeamColor && event->thisValue != attackerWins) {
+	bz_setTeamWins(event->team, event->lastValue);
+	event->thisValue = event->lastValue;
+      } else if(event->team == defendTeamColor && event->thisValue != defenderWins) {
+	bz_setTeamWins(event->team, event->lastValue);
+	event->thisValue = event->lastValue;
+      }
+    } else if(event->element == bz_eLosses) {
+      if(event->team == attackTeamColor && event->thisValue != attackerLosses) {
+	bz_setTeamLosses(event->team, event->lastValue);
+	event->thisValue = event->lastValue;
+      } else if(event->team == defendTeamColor && event->thisValue != defenderLosses) {
+	bz_setTeamLosses(event->team, event->lastValue);
+	event->thisValue = event->lastValue;
+      }
+    }
+
+    break;
+  }
+
   case bz_ePlayerSpawnEvent:
     {
-      StartMatch();
+      if(!matchEnded)
+	StartMatch();
+
       break;
     }
 
-  case bz_ePlayerJoinEvent:
-    {
-      bz_PlayerJoinPartEventData_V1* event = (bz_PlayerJoinPartEventData_V1*)eventData;
+  case bz_ePlayerJoinEvent: {
+    bz_PlayerJoinPartEventData_V1* event = (bz_PlayerJoinPartEventData_V1*)eventData;
 
-      playerRecord record;
+    playerRecord record;
 
-      record.playerID = event->playerID;
-      record.callsign = event->record->callsign.c_str();
-      record.hasKey = false;
-      record.team = bz_getPlayerTeam(event->playerID);
+    record.playerID = event->playerID;
+    record.callsign = event->record->callsign.c_str();
+    record.hasKey = false;
+    record.team = bz_getPlayerTeam(event->playerID);
 
-      playerList[event->playerID] = record;
-    }
+    playerList[event->playerID] = record;
+
     break;
+  }
 
-  case bz_ePlayerPartEvent:
-    {
-      bz_PlayerJoinPartEventData_V1* event = (bz_PlayerJoinPartEventData_V1*)eventData;
-      std::map<int, playerRecord>::iterator itr = playerList.find(event->playerID);
-      if (itr != playerList.end())
-	playerList.erase(itr);
+  case bz_ePlayerPartEvent: {
+    bz_PlayerJoinPartEventData_V1* event = (bz_PlayerJoinPartEventData_V1*)eventData;
+    std::map<int, playerRecord>::iterator itr = playerList.find(event->playerID);
+    if (itr != playerList.end())
+      playerList.erase(itr);
 
-      if(NoPlayers())
-	WinState(TIE);
-    }
+    if(NoPlayers())
+      WinState(TIE);
+      
     break;
+  }
 
   case bz_ePlayerUpdateEvent: {
     bz_PlayerUpdateEventData_V1* player = (bz_PlayerUpdateEventData_V1*)eventData;
@@ -360,6 +389,8 @@ void armory::Event (bz_EventData *eventData) {
 	    capStr += "!";
 	    WinState(ATTACKERS);
 	  }
+
+	  bz_incrementPlayerWins(player->playerID, 10);
 
 	  bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, (capStr).c_str());
 
@@ -452,6 +483,12 @@ void armory::Init (const char* commandLine) {
   attackTeamColor = eRedTeam; // hardcode for now, maybe changeable later
   defendTeamColor = eGreenTeam; // hardcode for now, maybe changeable later
 
+  attackerWins = 0;
+  attackerLosses = 0;
+
+  defenderWins = 0;
+  defenderLosses = 0;
+
   std::string param = commandLine;
 
   int time = atoi(param.c_str());
@@ -460,6 +497,8 @@ void armory::Init (const char* commandLine) {
   matchTime += 3; // extra 3 seconds for preparation/spawning
 
   Register(bz_eTickEvent);
+
+  Register(bz_eTeamScoreChanged);
 
   Register(bz_ePlayerUpdateEvent);
   Register(bz_ePlayerSpawnEvent);
