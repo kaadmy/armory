@@ -43,7 +43,7 @@
 enum {
   ATTACKERS = 0,
   DEFENDERS,
-  TIE
+  DRAW
 };
 
 // armorypoint class
@@ -65,8 +65,9 @@ public:
 
   virtual bool MapObject (bz_ApiString object, bz_CustomMapObjectInfo *data);
 
-  virtual bool EnoughPlayers(void);
   virtual bool NoPlayers(void);
+  virtual bool EnoughPlayers(void);
+  virtual bool BarelyEnoughPlayers(void);
 
   virtual void StartMatch(void);
 
@@ -121,9 +122,14 @@ bool armory::EnoughPlayers() {
   return false;
 }
 
+bool armory::BarelyEnoughPlayers() {
+  if(bz_getTeamCount(attackTeamColor) < 2 && bz_getTeamCount(defendTeamColor) < 2)
+    return true;
+  return false;
+}
+
 void armory::StartMatch (void) {
-  if(!matchEnded)
-    return;
+  if(!matchEnded) return;
 
   if(!EnoughPlayers())
     bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS,
@@ -143,8 +149,7 @@ void armory::StartMatch (void) {
 }
 
 void armory::WinState (int team) {
-  if(matchEnded)
-    return;
+  if(matchEnded) return;
 
   matchEnded = true;
 
@@ -164,12 +169,12 @@ void armory::WinState (int team) {
     bz_setTeamLosses(attackTeamColor, attackerLosses);
 
     teamString = "Defenders";
-  } else if(team == TIE) {
+  } else if(team == DRAW) {
     teamString = "Nobody";
   }
   
-  if(strcmp(teamString.c_str(), "Nobody")) 
-    bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "Nobody won the round; It's a tie!");
+  if(team == DRAW)
+    bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "Nobody won the round; It's a draw!");
   else
     bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "The %s have won the round!", teamString.c_str());
 
@@ -179,7 +184,7 @@ void armory::WinState (int team) {
   //  bz_debugMessage(0, std::to_string(playerList.size()).c_str());
   for(unsigned int i = 0; i < playerList.size(); i++) {
 
-    if(team != TIE) {
+    if(team != DRAW) {
       int rank = bz_getPlayerRank(playerList[i].playerID);
 
       if(playerList[i].team == team && rank > highestRank) {
@@ -201,8 +206,7 @@ void armory::WinState (int team) {
 }
 
 bool armory::MapObject (bz_ApiString object, bz_CustomMapObjectInfo *data) {
-  if(object != "ARMORYPOINT" || !data)
-    return false;
+  if(object != "ARMORYPOINT" || !data) return false;
 
   ArmoryPoint zone;
 
@@ -304,8 +308,8 @@ void armory::Event (bz_EventData *eventData) {
 
   case bz_ePlayerSpawnEvent:
     {
-      if(!matchEnded)
-	StartMatch();
+      if(EnoughPlayers()) StartMatch();
+      else bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "Not enough players, play fair!");
 
       break;
     }
@@ -328,11 +332,9 @@ void armory::Event (bz_EventData *eventData) {
   case bz_ePlayerPartEvent: {
     bz_PlayerJoinPartEventData_V1* event = (bz_PlayerJoinPartEventData_V1*)eventData;
     std::map<int, playerRecord>::iterator itr = playerList.find(event->playerID);
-    if (itr != playerList.end())
-      playerList.erase(itr);
+    if (itr != playerList.end()) playerList.erase(itr);
 
-    if(NoPlayers())
-      WinState(TIE);
+    if(NoPlayers()) WinState(DRAW);
       
     break;
   }
@@ -357,8 +359,7 @@ void armory::Event (bz_EventData *eventData) {
 	    }
 	  }
 
-	  if(!unlocked)
-	    continue;
+	  if(!unlocked) continue;
 
 	  int flagID = bz_getPlayerFlagID(player->playerID);
 	  bz_resetFlag(flagID);
