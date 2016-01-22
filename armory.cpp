@@ -82,6 +82,8 @@ public:
   
   std::vector<ArmoryPoint> armoryPoints;
   std::map<std::string, int> unlockedPoints; // list of unlocked points names
+
+  std::string nextPointName;
   
   float matchTime; // time for each round to be; this shouldn't change after init
   float matchEndTime; // what time the round ends at
@@ -300,6 +302,17 @@ void armory::Event (bz_EventData *eventData) {
       break;
     }
 
+  case bz_eKillEvent: {
+    bz_KillEventData_V1* event = (bz_KillEventData_V1*)eventData;
+
+    playerRecord &record = playerList.find(event->killedID)->second;
+
+    if(record.hasKey)
+      bz_incrementPlayerWins(event->killerID, 10);
+
+    break;
+  }
+
   case bz_ePlayerJoinEvent: {
     bz_PlayerJoinPartEventData_V1* event = (bz_PlayerJoinPartEventData_V1*)eventData;
 
@@ -362,10 +375,9 @@ void armory::Event (bz_EventData *eventData) {
 		capStr = armoryPoints[j].title;
 		capStr += " has been unlocked by ";
 		capStr += record.callsign;
-		capStr += "!";
+		capStr += "! +10 seconds!";
 
 		matchEndTime += 10; // increase time limit by 10 seconds		
-		capStr += " +10 seconds!";
 		break;
 	      }
 	    }
