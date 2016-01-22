@@ -203,6 +203,8 @@ void armory::WinState (int team) {
   if(mvp != -1)
     bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS,
 			"%s was the %s's MVP this round.", playerList[mvp].callsign.c_str(), teamString.c_str());
+
+  unlockedPoints.clear();
 }
 
 bool armory::MapObject (bz_ApiString object, bz_CustomMapObjectInfo *data) {
