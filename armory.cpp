@@ -40,6 +40,8 @@
 #include "bzfsAPI.h"
 #include "plugin_utils.h"
 
+const bool resetScoresOnRoundEnd = false;
+
 enum {
   ATTACKERS = 0,
   DEFENDERS,
@@ -143,8 +145,10 @@ void armory::StartMatch (void) {
   nextTimeWarning = bz_getCurrentTime() + 3;
 
   // reset all the player scores
-  for(unsigned int i = 0; i < playerList.size(); i++) {
-    bz_resetPlayerScore(playerList[i].playerID);
+  if(resetScoresOnRoundEnd) {
+    for(unsigned int i = 0; i < playerList.size(); i++) {
+      bz_resetPlayerScore(playerList[i].playerID);
+    }
   }
 }
 
@@ -188,7 +192,7 @@ void armory::WinState (int team) {
 
   unlockedPoints.clear();
 
-  bz_resetFlags();
+  bz_resetFlags(false);
 }
 
 bool armory::MapObject (bz_ApiString object, bz_CustomMapObjectInfo *data) {
