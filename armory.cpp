@@ -178,21 +178,7 @@ void armory::WinState (int team) {
   else
     bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS, "The %s have won the round!", teamString.c_str());
 
-  int highestRank = 0;
-  int mvp = -1;
-
-  //  bz_debugMessage(0, std::to_string(playerList.size()).c_str());
   for(unsigned int i = 0; i < playerList.size(); i++) {
-
-    if(team != DRAW) {
-      int rank = bz_getPlayerRank(playerList[i].playerID);
-
-      if(playerList[i].team == team && rank > highestRank) {
-	highestRank = rank;
-	mvp = i;
-      }
-    }
-
     // kill the player
     bz_killPlayer(playerList[i].playerID, false, BZ_SERVER);
 
@@ -200,11 +186,9 @@ void armory::WinState (int team) {
     bz_setPlayerLosses(playerList[i].playerID, bz_getPlayerLosses(playerList[i].playerID) - 1);
   }
 
-  if(mvp != -1)
-    bz_sendTextMessagef(BZ_SERVER, BZ_ALLUSERS,
-			"%s was the %s's MVP this round.", playerList[mvp].callsign.c_str(), teamString.c_str());
-
   unlockedPoints.clear();
+
+  bz_resetFlags();
 }
 
 bool armory::MapObject (bz_ApiString object, bz_CustomMapObjectInfo *data) {
@@ -290,18 +274,14 @@ void armory::Event (bz_EventData *eventData) {
     if(event->element == bz_eWins) {
       if(event->team == attackTeamColor && event->thisValue != attackerWins) {
 	bz_setTeamWins(event->team, event->lastValue);
-	event->thisValue = event->lastValue;
       } else if(event->team == defendTeamColor && event->thisValue != defenderWins) {
 	bz_setTeamWins(event->team, event->lastValue);
-	event->thisValue = event->lastValue;
       }
     } else if(event->element == bz_eLosses) {
       if(event->team == attackTeamColor && event->thisValue != attackerLosses) {
 	bz_setTeamLosses(event->team, event->lastValue);
-	event->thisValue = event->lastValue;
       } else if(event->team == defendTeamColor && event->thisValue != defenderLosses) {
 	bz_setTeamLosses(event->team, event->lastValue);
-	event->thisValue = event->lastValue;
       }
     }
 
