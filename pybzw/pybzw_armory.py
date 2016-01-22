@@ -1106,14 +1106,11 @@ bzw.add_object(["group", "armorypoint"], [
         ])
 
 bzw.add_object("armorypoint", [ # fourth armorypoint; Waterfall
-        ["pos", pybzw.Vector(val = [40, 20, -0.1])],
-        ["size", pybzw.Vector(val = [AR, AR, 5])],
+        ["pos", pybzw.Vector(val = [30, 45, 0])],
+        ["size", pybzw.Vector(val = [3, 5, 35])],
         ["title", "\"The Waterfall\""],
         ["name", "\"waterfall\""],
         ["unlock", "\"armory\""],
-        ])
-bzw.add_object(["group", "armorypoint"], [
-        ["shift", pybzw.Vector(val = [40, 20, 0])],
         ])
 
 bzw.add_object("armorypoint", [ # fifth armorypoint; Armory
