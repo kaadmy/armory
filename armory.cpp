@@ -163,13 +163,13 @@ void armory::WinState (int team) {
 
   if(team == ATTACKERS) {
     attackerWins ++;
-    defenderLosses --;
+    defenderLosses ++;
     
     bz_setTeamWins(attackTeamColor, attackerWins);
     bz_setTeamLosses(defendTeamColor, defenderLosses);
   } else if(team == DEFENDERS) {
     defenderWins ++;
-    attackerLosses --;
+    attackerLosses ++;
     
     bz_setTeamWins(defendTeamColor, defenderWins);
     bz_setTeamLosses(attackTeamColor, attackerLosses);
@@ -279,15 +279,15 @@ void armory::Event (bz_EventData *eventData) {
 
     if(event->element == bz_eWins) {
       if(event->team == attackTeamColor && event->thisValue != attackerWins) {
-	bz_setTeamWins(event->team, event->lastValue);
+	bz_setTeamWins(event->team, attackerWins);
       } else if(event->team == defendTeamColor && event->thisValue != defenderWins) {
-	bz_setTeamWins(event->team, event->lastValue);
+	bz_setTeamWins(event->team, defenderWins);
       }
     } else if(event->element == bz_eLosses) {
       if(event->team == attackTeamColor && event->thisValue != attackerLosses) {
-	bz_setTeamLosses(event->team, event->lastValue);
+	bz_setTeamLosses(event->team, attackerLosses);
       } else if(event->team == defendTeamColor && event->thisValue != defenderLosses) {
-	bz_setTeamLosses(event->team, event->lastValue);
+	bz_setTeamLosses(event->team, defenderLosses);
       }
     }
 
