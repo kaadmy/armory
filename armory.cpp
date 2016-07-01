@@ -144,7 +144,7 @@ void armory::StartMatch (void) {
   matchEnded = false;
   matchEndTime = bz_getCurrentTime() + matchTime;
 
-  nextTimeWarning = bz_getCurrentTime() + 3;
+  nextTimeWarning = bz_getCurrentTime() + 5;
 
   // reset all the player scores
   if(resetScoresOnRoundEnd) {
@@ -375,9 +375,13 @@ void armory::Event (bz_EventData *eventData) {
 		capStr = armoryPoints[j].title;
 		capStr += " has been unlocked by ";
 		capStr += record.callsign;
-		capStr += "! +10 seconds!";
+		capStr += "! +";
+		capStr += std::to_string(((10 * j) + 10));
+		capStr += " seconds!";
 
-		matchEndTime += 10; // increase time limit by 10 seconds		
+		matchEndTime += (10 * j) + 10; // increase time limit
+
+		nextTimeWarning += (10 * j) + 10; // next point
 		break;
 	      }
 	    }
@@ -473,7 +477,7 @@ void armory::Event (bz_EventData *eventData) {
 }
 
 void armory::Init (const char* commandLine) {
-  matchTime = 2 * 60; // default 2 minutes
+  matchTime = 4 * 60; // default 4 minutes
   matchEndTime = -1;
   matchEnded = true;
 
@@ -493,7 +497,7 @@ void armory::Init (const char* commandLine) {
   int time = atoi(param.c_str());
   if(time > 0) matchTime = (float)(time * 60);
 
-  matchTime += 3; // extra 3 seconds for preparation/spawning
+  matchTime += 5; // extra 5 seconds for preparation/spawning
 
   Register(bz_eTickEvent);
 

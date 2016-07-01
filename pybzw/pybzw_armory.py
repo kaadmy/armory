@@ -46,7 +46,7 @@ AH = 6 # arrow sign height
 
 AR = 3 # armorypoint radius
 
-bzw = pybzw.World("../armory.bzw", "Kaadmy")
+bzw = pybzw.World("../armory.bzw", "KaadmY")
 
 # world options
 bzw.add_object("world", [["name", "\"Armory\""], ["size", 150]])
@@ -184,7 +184,7 @@ bzw.add_object("material", [
         ["name", "armorypoint"],
         ["noshadow"],
         ["alphathresh", 0.6],
-        ["texture", "http://images.bzflag.org/kaadmy/armorypoint.png"],
+        ["texture", "http://images.bzflag.org/kdmy/armorypoint.png"],
         ])
 
 # flowing water material

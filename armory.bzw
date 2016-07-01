@@ -1,6 +1,6 @@
 
 # PYBZW map export module v0.1 by Kaadmy
-# Map made by Kaadmy
+# Map made by KaadmY
 
 world
   name "Armory"
@@ -127,7 +127,7 @@ material
   name armorypoint
   noshadow
   alphathresh 0.6
-  texture http://images.bzflag.org/kaadmy/armorypoint.png
+  texture http://images.bzflag.org/kdmy/armorypoint.png
 end
 
 material
